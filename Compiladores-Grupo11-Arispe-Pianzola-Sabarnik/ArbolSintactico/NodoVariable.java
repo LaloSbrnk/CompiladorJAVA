@@ -63,4 +63,9 @@ public class NodoVariable extends Nodo {
     public String getNombre(){
         return this.nombre;
     }
+    @Override
+    public void imprimir(String prefijo) {
+        // Aplicamos sangría directamente a la misma línea
+        System.out.println(prefijo + "Variable: " + nombre);
+    }
 }

@@ -55,7 +55,6 @@ public class NodoAsignacionMultiple extends Nodo {
             }
             if (huboError) return "error";
             
-            System.out.println("DEBUG: Asignacion Multiple (con invocacion) chequeada OK.");
             return "void";
             
         } else {
@@ -93,8 +92,19 @@ public class NodoAsignacionMultiple extends Nodo {
             return "error";
         }
 
-        System.out.println("DEBUG: Asignacion Multiple (Tema 16) chequeada OK.");
         return "void"; 
     }
 }
+    @Override
+    public void imprimir(String prefijo) {
+        System.out.println(prefijo + "Asignacion Multiple (=)");
+        System.out.println(prefijo + "  " + "Lado Izquierdo:");
+        for (NodoVariable v : variables) {
+            v.imprimir(prefijo + "    ");
+        }
+        System.out.println(prefijo + "  " + "Lado Derecho:");
+        for (Nodo e : expresiones) {
+            e.imprimir(prefijo + "    ");
+        }
+    }
 }

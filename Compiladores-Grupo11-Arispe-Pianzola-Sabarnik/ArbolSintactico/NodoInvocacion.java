@@ -89,4 +89,14 @@ public class NodoInvocacion extends Nodo {
              return "multiple"; 
         }
     }
+    @Override
+    public void imprimir(String prefijo) {
+        System.out.println(prefijo + "Invocacion a: " + nombreFuncion);
+        if (parametrosReales != null && !parametrosReales.isEmpty()) {
+             System.out.println(prefijo + "  " + "Parametros Reales:");
+            for (NodoParametroReal pr : parametrosReales) {
+                pr.imprimir(prefijo + "    ");
+            }
+        }
+    }
 }

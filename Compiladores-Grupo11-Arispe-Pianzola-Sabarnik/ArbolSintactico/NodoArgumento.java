@@ -36,4 +36,12 @@ public class NodoArgumento extends Nodo {
             return tipoArgumento;
         }
     }
+    @Override
+    public void imprimir(String prefijo) {
+        if ("id".equals(tipoArgumento)) {
+            System.out.println(prefijo + "Argumento (Variable: " + valor.toString() + ")");
+        } else {
+            System.out.println(prefijo + "Argumento (Constante " + tipoArgumento + ": " + valor.toString() + ")");
+        }
+    }
 }

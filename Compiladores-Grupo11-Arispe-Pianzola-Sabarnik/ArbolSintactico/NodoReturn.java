@@ -59,7 +59,13 @@ public class NodoReturn extends Nodo {
             return "error";
         }
 
-        System.out.println("DEBUG: Chequeo de RETURN para funcion '" + funcionContenedora.getNombre() + "' OK.");
         return "void"; 
+    }
+    @Override
+    public void imprimir(String prefijo) {
+        System.out.println(prefijo + "Sentencia RETURN");
+        for (Nodo e : expresionesRetorno) {
+            e.imprimir(prefijo + "  " + "Valor: ");
+        }
     }
 }

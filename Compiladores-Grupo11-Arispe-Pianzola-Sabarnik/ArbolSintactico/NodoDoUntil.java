@@ -23,4 +23,12 @@ public class NodoDoUntil extends Nodo {
         
         return "void"; 
     }
+    @Override
+    public void imprimir(String prefijo) {
+        System.out.println(prefijo + "Sentencia DO-UNTIL");
+        System.out.println(prefijo + "  " + "Cuerpo DO:");
+        bloque.imprimir(prefijo + "    ");
+        System.out.println(prefijo + "  " + "Condicion UNTIL:");
+        condicion.imprimir(prefijo + "    ");
+    }
 }

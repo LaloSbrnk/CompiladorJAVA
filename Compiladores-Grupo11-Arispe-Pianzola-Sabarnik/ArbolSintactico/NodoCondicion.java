@@ -36,4 +36,10 @@ public class NodoCondicion extends Nodo {
         
         return "boolean"; 
     }
+    @Override
+    public void imprimir(String prefijo) {
+        System.out.println(prefijo + "Comparacion: " + op);
+        izq.imprimir(prefijo + "  " + "Izq: ");
+        der.imprimir(prefijo + "  " + "Der: ");
+    }
 }

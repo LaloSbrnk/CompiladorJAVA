@@ -18,7 +18,6 @@ public class NodoLambdaInline extends Nodo {
 
 @Override
     public String chequear(TablaDeAmbitos TdA) {
-        System.out.println("DEBUG: Chequeando Lambda Inline");
 
         // Chequeamos el tipo del argumento que se le PASA
         String tipoArgumentoReal = argumento.chequear(TdA);
@@ -56,7 +55,6 @@ public class NodoLambdaInline extends Nodo {
             TdA.cerrarAmbito(); 
             return "error";
         } else {
-             System.out.println("DEBUG: Lambda: Registrado parametro '" + attrsParam.getMangledName() + "' tipo '" + this.tipoParam + "' en ambito temporal.");
         }
 
 
@@ -65,7 +63,15 @@ public class NodoLambdaInline extends Nodo {
         TdA.cerrarAmbito();
         // --- FIN SIMULACION ---
 
-        System.out.println("DEBUG: Fin chequeo Lambda Inline.");
         return "void"; 
+    }
+    @Override
+    public void imprimir(String prefijo) {
+        System.out.println(prefijo + "Expresion Lambda (Inline)");
+        System.out.println(prefijo + "  " + "Parametro: " + nombreParam + " (Tipo: " + tipoParam + ")");
+        System.out.println(prefijo + "  " + "Cuerpo:");
+        cuerpo.imprimir(prefijo + "    ");
+        System.out.println(prefijo + "  " + "Argumento:");
+        argumento.imprimir(prefijo + "    ");
     }
 }

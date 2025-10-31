@@ -26,4 +26,11 @@ public class NodoBloque extends Nodo {
         }
         return "void"; // Un bloque no tiene tipo
     }
+    @Override
+    public void imprimir(String prefijo) {
+        // Un bloque en sí no se imprime, solo sus sentencias
+        for (Nodo s : sentencias) {
+            if (s != null) s.imprimir(prefijo);
+        }
+    }
 }

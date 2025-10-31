@@ -50,4 +50,12 @@ public class NodoOperacion extends Nodo {
         System.err.println("ERROR Semantico: Tipos incompatibles en la operacion '" + op + "': " + tipoIzq + ", " + tipoDer);
         return "error";
     }
+    @Override
+    public void imprimir(String prefijo) {
+        System.out.println(prefijo + "Operacion: " + op);
+        izq.imprimir(prefijo + "  " + "Izq: ");
+        if (der != null) {
+            der.imprimir(prefijo + "  " + "Der: ");
+        }
+    }
 }

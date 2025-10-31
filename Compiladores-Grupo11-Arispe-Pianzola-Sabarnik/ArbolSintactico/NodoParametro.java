@@ -35,8 +35,12 @@ public class NodoParametro extends Nodo {
             System.err.println("ERROR Semantico: Redeclaracion de parametro '" + this.nombre + "'.");
             return "error";
         } else {
-            System.out.println("DEBUG: Registrado parametro '" + attrs.getMangledName() + "' con tipo '" + this.tipo + "' y modo '" + this.modoPasaje + "'");
         }
         return this.tipo; 
+    }
+    @Override
+    public void imprimir(String prefijo) {
+        String modo = (modoPasaje != null) ? " (" + modoPasaje + ")" : "";
+        System.out.println(prefijo + "Parametro: " + nombre + " (Tipo: " + tipo + modo + ")");
     }
 }

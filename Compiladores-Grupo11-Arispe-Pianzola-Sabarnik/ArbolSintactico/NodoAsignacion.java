@@ -55,7 +55,6 @@ public class NodoAsignacion extends Nodo {
                  System.err.println("ERROR Semantico: Redeclaracion de variable (por inferencia) '" + nombreVar + "'.");
                 return "error";
             }
-            System.out.println("DEBUG: Declarada variable (por inferencia) '" + attrsNuevos.getMangledName() + "' con tipo '" + tipoExpr + "'");
             return tipoExpr;
 
         } else {
@@ -99,5 +98,15 @@ public class NodoAsignacion extends Nodo {
             }
             return tipoVar;
         }
+    }
+    @Override
+    public void imprimir(String prefijo) {
+        if (esInferencia) {
+            System.out.println(prefijo + "Asignacion (con Inferencia 'var')");
+        } else {
+            System.out.println(prefijo + "Asignacion (:=)");
+        }
+        variable.imprimir(prefijo + "  " + "Lado Izquierdo: ");
+        expresion.imprimir(prefijo + "  " + "Lado Derecho: ");
     }
 }

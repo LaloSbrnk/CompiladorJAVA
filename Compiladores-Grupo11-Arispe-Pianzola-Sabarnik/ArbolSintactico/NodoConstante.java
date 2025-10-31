@@ -16,4 +16,9 @@ public class NodoConstante extends Nodo {
     public String chequear(TablaDeAmbitos TdA) {
         return this.tipo; 
     }
+    @Override
+    public void imprimir(String prefijo) {
+        // Aplicamos sangría directamente a la misma línea
+        System.out.println(prefijo + "Constante (" + tipo + "): " + valor.toString());
+    }
 }

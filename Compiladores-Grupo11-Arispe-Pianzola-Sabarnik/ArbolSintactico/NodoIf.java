@@ -27,4 +27,16 @@ public class NodoIf extends Nodo {
         
         return "void"; 
     }
+    @Override
+    public void imprimir(String prefijo) {
+        System.out.println(prefijo + "Sentencia IF");
+        System.out.println(prefijo + "  " + "Condicion:");
+        condicion.imprimir(prefijo + "    ");
+        System.out.println(prefijo + "  " + "Bloque THEN:");
+        bloqueTrue.imprimir(prefijo + "    ");
+        if (bloqueFalse != null) {
+            System.out.println(prefijo + "  " + "Bloque ELSE:");
+            bloqueFalse.imprimir(prefijo + "    ");
+        }
+    }
 }

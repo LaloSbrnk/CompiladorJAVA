@@ -115,29 +115,42 @@ public class AnalizadorLexico {
     };
 
     } 
-    public void printWarnings(){
-        System.out.println();
-        System.out.println("---Warnings---");
-        for(String warnings: errores_y_warnings)
-            if(warnings.contains("WARNING"))
-                System.out.println(warnings);
+    public static void printReporteLexico() {
+        System.out.println("\n--- 3. Reporte de Errores y Warnings (Lexicos) ---");
+        
+        ArrayList<String> warnings = new ArrayList<>();
+        ArrayList<String> errores = new ArrayList<>();
+
+        for (String msg : errores_y_warnings) {
+            if (msg.contains("WARNING")) {
+                warnings.add(msg);
+            } else if (msg.contains("ERROR")) {
+                errores.add(msg);
+            }
+        }
+
+        if (warnings.isEmpty() && errores.isEmpty()) {
+            System.out.println("Sin errores lexicos ni warnings.");
+            return;
+        }
+
+        for (String w : warnings) {
+            System.out.println(w);
+        }
+        for (String e : errores) {
+            System.out.println(e);
+        }
     }
 
-    public void printErrors(){
-    System.out.println();
-    System.out.println("---Errores---");
-    for(String errores: errores_y_warnings)
-        if(errores.contains("ERROR"))
-            System.out.println(errores);
-}
-
     public void printTablaSimbolos(){
-        System.out.println();
-        System.out.println("---Tabla de Simbolos---");
+        System.out.println("\n--- 4. Contenido de la Tabla de Símbolos ---");
         for(Map.Entry<String, AtributosTokens> entry: tablaSimbolos.entrySet()){
             String lexema = entry.getKey();
             AtributosTokens atributo = entry.getValue();
-            System.out.println("\"" + lexema + "\", " + atributo);
+            // Solo imprimir IDs (variables, funciones) que tengan info semantica
+            if (atributo.getUso() != null || atributo.getIdToken() >= 257) {
+                 System.out.println("\"" + lexema + "\", " + atributo);
+            }
         }
     }
 
@@ -176,7 +189,6 @@ public class AnalizadorLexico {
                     j = 20; // El índice de la columna "Otro"
                 }
 
-                //System.out.println("DEBUG -> Estado: " + estado_actual + ", Carácter: '" + caracter + "', Columna Detectada: " + j);
 
                 //consulto matrices
                 AccionSemantica accionSemantica = matrizAcciones[estado_actual][j];
@@ -202,7 +214,6 @@ public class AnalizadorLexico {
                     // ---- INICIO DEL BLOQUE CORREGIDO ----
 
                     int tokenId = newToken.getId();
-                    //System.out.println("DEBUG -> Token Finalizado. ID: " + tokenId + ", Lexema: '" + newToken.getLexema() + "'"); // <-- DEBUG ADICIONAL
 
                     
                     // Creamos un nuevo ParserVal para yylval. Por defecto está vacío.
@@ -212,7 +223,6 @@ public class AnalizadorLexico {
                     switch (tokenId) {
                         case Parser.IDENTIFICADOR:
                         case Parser.CADENA:
-                            System.out.println("DEBUG -> Asignando a yylval.sval: '" + newToken.getLexema() + "'"); // <-- DEBUG CLAVE
                             // Para ID y CADENA, el parser espera un String en .sval
                             this.yylval.sval = newToken.getLexema();
                             break;
@@ -239,7 +249,6 @@ public class AnalizadorLexico {
                     }
                     // ---- FIN DEL BLOQUE CORREGIDO ----
 
-                    System.out.println("DEBUG -> Token Reconocido: " + tokenId);
                     return tokenId; // Retornamos el ID del token
                     //return newToken.getId(); //retorna token valido
                 } else if (estado_actual == ESTADO_ERROR){
@@ -248,7 +257,6 @@ public class AnalizadorLexico {
                 // igualmente asignó un ID (ej. 0), debemos devolver ese token
                 // para que el parser pueda aplicar la regla 'error'.
                 if (newToken.getId() != -1) { // -1 es el ID por defecto
-                    System.out.println("DEBUG -> Token de Error Reconocido: " + newToken.getId());
                     this.yylval = new ParserVal(); // Devolver yylval vacío
                     return newToken.getId();
                 }
@@ -294,9 +302,7 @@ public static void main(String[] args) {
             }
         }
 
-        lex.printTablaSimbolos();
-        lex.printErrors();
-        lex.printWarnings(); 
+        lex.printTablaSimbolos(); 
 
     } catch (IOException e) {
         System.err.println("Error al leer el archivo: " + e.getMessage());

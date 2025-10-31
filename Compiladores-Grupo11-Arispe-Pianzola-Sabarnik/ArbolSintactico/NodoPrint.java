@@ -21,4 +21,9 @@ public class NodoPrint extends Nodo {
         
         return "void"; 
     }
+    @Override
+    public void imprimir(String prefijo) {
+        System.out.println(prefijo + "Sentencia PRINT");
+        expresion.imprimir(prefijo + "  " + "Argumento: ");
+    }
 }

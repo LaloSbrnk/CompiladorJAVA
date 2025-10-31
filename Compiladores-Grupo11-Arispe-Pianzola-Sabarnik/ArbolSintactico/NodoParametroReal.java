@@ -25,4 +25,9 @@ public class NodoParametroReal extends Nodo {
         // Solo chequeamos la expresion que contiene
         return expresion.chequear(TdA);
     }
+    @Override
+    public void imprimir(String prefijo) {
+        System.out.println(prefijo + "Parametro Real (-> " + nombreFormal + "):");
+        expresion.imprimir(prefijo + "  ");
+    }
 }

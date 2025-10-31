@@ -155,7 +155,6 @@ funcion_def
           attrsFuncion.setUso("funcion");
           attrsFuncion.setTiposRetorno(tiposRetorno);
           attrsFuncion.setParametros(params);
-          System.out.println("DEBUG: Registrada funcion '" + nombreFuncion + "' en TS global");
           
           // Creamos el nodo INCOMPLETO (sin cuerpo)
           NodoFuncionDef nodoFunc = new NodoFuncionDef(nombreFuncion, tiposRetorno, params, null, attrsFuncion);

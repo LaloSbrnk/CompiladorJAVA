@@ -42,9 +42,15 @@ public class NodoDeclaracion extends Nodo {
                 // ¡Usamos TdA.agregar() que ya hace esto y setea el mangledName!
                 TdA.agregar(nombreVar, attrs);
                 
-                System.out.println("DEBUG: Declarada variable '" + mangledName + "' con tipo '" + this.tipo + "'");
             }
         }
         return "void"; 
+    }
+    @Override
+    public void imprimir(String prefijo) {
+        System.out.println(prefijo + "Declaracion (Tipo: " + tipo + ")");
+        for (String var : variables) {
+            System.out.println(prefijo + "  " + "Variable: " + var);
+        }
     }
 }

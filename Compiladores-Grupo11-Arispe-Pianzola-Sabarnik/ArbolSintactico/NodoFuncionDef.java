@@ -36,7 +36,6 @@ public class NodoFuncionDef extends Nodo {
     
 @Override
     public String chequear(TablaDeAmbitos TdA) {
-        System.out.println("DEBUG: Chequeando funcion '" + this.nombre + "'");
 
         // 1. La función en sí misma se declara en el ámbito *actual* (padre)
         String mangledName = this.nombre + TdA.getMangledScope(); // Ej: "F1:MAIN"
@@ -65,7 +64,19 @@ public class NodoFuncionDef extends Nodo {
         TdA.cerrarAmbito(); // Pila -> [...]
         // --- FIN MANEJO DE AMBITO ---
 
-        System.out.println("DEBUG: Fin chequeo funcion '" + this.nombre + "'");
         return "void";
+    }
+    @Override
+    public void imprimir(String prefijo) {
+        String retornos = tiposRetorno.toString();
+        System.out.println(prefijo + "Definicion Funcion: " + nombre + " (Retorna: " + retornos + ")");
+        if (parametros != null && !parametros.isEmpty()) {
+            System.out.println(prefijo + "  " + "Parametros Formales:");
+            for (NodoParametro p : parametros) {
+                p.imprimir(prefijo + "    ");
+            }
+        }
+        System.out.println(prefijo + "  " + "Cuerpo:");
+        cuerpo.imprimir(prefijo + "    ");
     }
 }
