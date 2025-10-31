@@ -13,14 +13,17 @@ public class NodoPrograma extends Nodo {
     }
 
     @Override
-    public String chequear(TablaDeAmbitos TdA) {
-        System.out.println("DEBUG: Iniciando chequeo semantico del programa '" + nombrePrograma + "'");
+        public String chequear(TablaDeAmbitos TdA) {
+            System.out.println("DEBUG: Iniciando chequeo semantico del programa '" + nombrePrograma + "'");
 
-        // El chequeo principal se hace en el bloque hijo
-        bloquePrincipal.chequear(TdA);
+            // Establece el nombre del ámbito global
+            TdA.abrirAmbito(this.nombrePrograma); // Pila -> ["PROGRAMA%1"]
 
-        System.out.println("DEBUG: Fin chequeo semantico del programa '" + nombrePrograma + "'");
-        
-        return "void"; 
-    }
+            // El chequeo principal se hace en el bloque hijo
+            bloquePrincipal.chequear(TdA);
+
+            System.out.println("DEBUG: Fin chequeo semantico del programa '" + nombrePrograma + "'");
+            
+            return "void"; 
+        }
 }

@@ -23,11 +23,13 @@ public class AS7 extends AccionSemantica {
 
         } else {
             // --- Caso de Error: Es una palabra en minúsculas pero no es reservada ---
-            // Se registra el error en la lista. No se asigna ningún ID, ya que
-            // la matriz de transición nos llevará a un ESTADO_ERROR.
             String mensajeError = "ERROR en línea " + AnalizadorLexico.numero_linea + 
                                   ": La palabra en minúsculas '" + lexema + "' no es una palabra reservada válida.";
             AnalizadorLexico.errores_y_warnings.add(mensajeError);
+
+            // --- CORRECCIÓN ---
+            // Devolvemos el token especial de error de YACC (256)
+            token.setId(Parser.YYERRCODE); // <-- CAMBIAR 0 POR Parser.YYERRCODE
         }
     }
 

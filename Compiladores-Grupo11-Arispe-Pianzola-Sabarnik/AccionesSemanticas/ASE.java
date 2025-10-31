@@ -1,9 +1,12 @@
 package AccionesSemanticas;
 import CompiladoresMain.*;
+import CompiladoresMain.Parser; 
 
 public class ASE extends AccionSemantica{
     @Override
     public void ejecutar(Token token, char c) {
+        token.setId(Parser.YYERRCODE); 
+        
         switch (AnalizadorLexico.estado_actual) {
             case 0:
                 AnalizadorLexico.errores_y_warnings.add("Linea " + AnalizadorLexico.numero_linea +
@@ -35,7 +38,7 @@ public class ASE extends AccionSemantica{
             case 14:
                 AnalizadorLexico.errores_y_warnings.add("Linea " + AnalizadorLexico.numero_linea +
                         " / Posicion " + (AnalizadorLexico.indice_caracter_leer - 1) +
-                        " - ERROR: Se esperaba simbolo '}' previo al salto de linea.");
+                        " - ERROR: Se esperaba un segundo '#' para iniciar el comentario multilineal.");
             break;
         }
     }

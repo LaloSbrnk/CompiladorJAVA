@@ -16,9 +16,9 @@ public class NodoInvocacion extends Nodo {
     
     public String getNombre() { return nombreFuncion; }
 
-    @Override
+@Override
     public String chequear(TablaDeAmbitos TdA) {
-        // Buscar la funcion en la Tabla de Ambitos
+        // Buscar la funcion en la Tabla de Ambitos (usando la nueva búsqueda mangled)
         AtributosTokens attrsFuncion = TdA.buscar(nombreFuncion);
 
         // Chequear si existe y si es una funcion

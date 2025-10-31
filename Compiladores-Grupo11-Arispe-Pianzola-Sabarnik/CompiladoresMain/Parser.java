@@ -481,7 +481,7 @@ final static String yyrule[] = {
 "argumento : CTE_DFLOAT",
 };
 
-//#line 564 "gramatica.y"
+//#line 568 "gramatica.y"
 
 /* --- Código Java Auxiliar --- */
 
@@ -522,10 +522,7 @@ public static void main(String[] args) {
             // Crear la Tabla de Ambitos, pasando la TS global del Lexer
             TablaDeAmbitos tablaDeAmbitos = new TablaDeAmbitos(AnalizadorLexico.tablaSimbolos);
 
-            // Abrir el ambito global (carga la TS del lexer en la pila)
-            tablaDeAmbitos.abrirAmbitoGlobal();
-
-            // Llamar al 'chequear' de la raiz del arbol
+            // El 'arbol' (NodoPrograma) se encargará de abrir el primer ámbito.
             arbol.chequear(tablaDeAmbitos);
 
             System.out.println("--- Chequeo Semantico Finalizado ---");
@@ -546,7 +543,7 @@ public static void main(String[] args) {
         e.printStackTrace(); // Imprime la traza completa del error
     }
 }
-//#line 478 "Parser.java"
+//#line 475 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -894,49 +891,62 @@ break;
 case 22:
 //#line 234 "gramatica.y"
 {
-            yyval = new ParserVal(new NodoParametro(val_peek(0).sval, val_peek(1).sval));
+            /* $3=ID(nombre), $2=tipo, $1=modoPasaje*/
+            yyval = new ParserVal(new NodoParametro((String)val_peek(0).sval, (String)val_peek(1).sval, (String)val_peek(2).sval));
         }
 break;
+case 23:
+//#line 242 "gramatica.y"
+{ yyval = new ParserVal(null); }
+break;
+case 24:
+//#line 244 "gramatica.y"
+{ yyval = new ParserVal("cv sl"); }
+break;
+case 25:
+//#line 246 "gramatica.y"
+{ yyval = new ParserVal("cv le"); }
+break;
 case 26:
-//#line 247 "gramatica.y"
+//#line 251 "gramatica.y"
 {
             yyval = new ParserVal(val_peek(0).obj); 
         }
 break;
 case 27:
-//#line 256 "gramatica.y"
-{ yyval = new ParserVal(val_peek(0).obj); }
-break;
-case 28:
-//#line 258 "gramatica.y"
-{ yyval = new ParserVal(val_peek(0).obj); }
-break;
-case 29:
 //#line 260 "gramatica.y"
 { yyval = new ParserVal(val_peek(0).obj); }
 break;
-case 30:
+case 28:
 //#line 262 "gramatica.y"
 { yyval = new ParserVal(val_peek(0).obj); }
 break;
-case 31:
+case 29:
 //#line 264 "gramatica.y"
 { yyval = new ParserVal(val_peek(0).obj); }
 break;
-case 32:
+case 30:
 //#line 266 "gramatica.y"
 { yyval = new ParserVal(val_peek(0).obj); }
 break;
-case 33:
+case 31:
 //#line 268 "gramatica.y"
 { yyval = new ParserVal(val_peek(0).obj); }
 break;
-case 34:
+case 32:
 //#line 270 "gramatica.y"
 { yyval = new ParserVal(val_peek(0).obj); }
 break;
+case 33:
+//#line 272 "gramatica.y"
+{ yyval = new ParserVal(val_peek(0).obj); }
+break;
+case 34:
+//#line 274 "gramatica.y"
+{ yyval = new ParserVal(val_peek(0).obj); }
+break;
 case 35:
-//#line 275 "gramatica.y"
+//#line 279 "gramatica.y"
 {
             NodoVariable var = new NodoVariable(val_peek(2).sval);
             Nodo expr = (Nodo)val_peek(0).obj;
@@ -944,19 +954,19 @@ case 35:
         }
 break;
 case 36:
-//#line 285 "gramatica.y"
+//#line 289 "gramatica.y"
 {
             yyval = new ParserVal(val_peek(0).sval);
         }
 break;
 case 37:
-//#line 289 "gramatica.y"
+//#line 293 "gramatica.y"
 {
             yyval = new ParserVal(val_peek(2).sval + "." + val_peek(0).sval);
         }
 break;
 case 38:
-//#line 297 "gramatica.y"
+//#line 301 "gramatica.y"
 {
             ArrayList<NodoVariable> vars = (ArrayList<NodoVariable>)val_peek(2).obj;
             ArrayList<Nodo> exprs = (ArrayList<Nodo>)val_peek(0).obj;
@@ -964,7 +974,7 @@ case 38:
         }
 break;
 case 39:
-//#line 306 "gramatica.y"
+//#line 310 "gramatica.y"
 {
             ArrayList<NodoVariable> lista = new ArrayList<>();
             lista.add(new NodoVariable(val_peek(0).sval)); 
@@ -972,7 +982,7 @@ case 39:
         }
 break;
 case 40:
-//#line 312 "gramatica.y"
+//#line 316 "gramatica.y"
 {
             ArrayList<NodoVariable> lista = (ArrayList<NodoVariable>)val_peek(2).obj;
             lista.add(new NodoVariable(val_peek(0).sval));
@@ -980,7 +990,7 @@ case 40:
         }
 break;
 case 41:
-//#line 321 "gramatica.y"
+//#line 325 "gramatica.y"
 {
             ArrayList<Nodo> listaNodos = new ArrayList<>();
             listaNodos.add((Nodo)val_peek(0).obj);
@@ -988,7 +998,7 @@ case 41:
         }
 break;
 case 42:
-//#line 327 "gramatica.y"
+//#line 331 "gramatica.y"
 {
             ArrayList<Nodo> listaNodos = (ArrayList<Nodo>)val_peek(2).obj;
             listaNodos.add((Nodo)val_peek(0).obj);
@@ -996,7 +1006,7 @@ case 42:
         }
 break;
 case 43:
-//#line 339 "gramatica.y"
+//#line 343 "gramatica.y"
 {
             Nodo nodo_cond = (Nodo)val_peek(4).obj;
             NodoBloque bloque_true = (NodoBloque)val_peek(2).obj;
@@ -1005,19 +1015,19 @@ case 43:
         }
 break;
 case 44:
-//#line 349 "gramatica.y"
+//#line 353 "gramatica.y"
 {
             yyval = new ParserVal(null);
         }
 break;
 case 45:
-//#line 353 "gramatica.y"
+//#line 357 "gramatica.y"
 {
             yyval = new ParserVal(val_peek(0).obj);
         }
 break;
 case 46:
-//#line 361 "gramatica.y"
+//#line 365 "gramatica.y"
 {
             NodoBloque bloque_do = (NodoBloque)val_peek(4).obj;
             Nodo nodo_cond = (Nodo)val_peek(1).obj;
@@ -1025,7 +1035,7 @@ case 46:
         }
 break;
 case 47:
-//#line 370 "gramatica.y"
+//#line 374 "gramatica.y"
 {
             NodoBloque bloque = new NodoBloque();
             bloque.agregarSentencia((Nodo)val_peek(0).obj);
@@ -1033,13 +1043,13 @@ case 47:
         }
 break;
 case 48:
-//#line 376 "gramatica.y"
+//#line 380 "gramatica.y"
 {
             yyval = new ParserVal(val_peek(1).obj);
         }
 break;
 case 49:
-//#line 386 "gramatica.y"
+//#line 390 "gramatica.y"
 {
             Nodo nodo_izq = (Nodo)val_peek(2).obj;
             String op = val_peek(1).sval;
@@ -1048,37 +1058,37 @@ case 49:
         }
 break;
 case 50:
-//#line 395 "gramatica.y"
+//#line 399 "gramatica.y"
 { yyval = new ParserVal(">"); }
 break;
 case 51:
-//#line 396 "gramatica.y"
+//#line 400 "gramatica.y"
 { yyval = new ParserVal("<"); }
 break;
 case 52:
-//#line 397 "gramatica.y"
+//#line 401 "gramatica.y"
 { yyval = new ParserVal(">="); }
 break;
 case 53:
-//#line 398 "gramatica.y"
+//#line 402 "gramatica.y"
 { yyval = new ParserVal("<="); }
 break;
 case 54:
-//#line 399 "gramatica.y"
+//#line 403 "gramatica.y"
 { yyval = new ParserVal("=="); }
 break;
 case 55:
-//#line 400 "gramatica.y"
+//#line 404 "gramatica.y"
 { yyval = new ParserVal("!="); }
 break;
 case 56:
-//#line 405 "gramatica.y"
+//#line 409 "gramatica.y"
 {
             yyval = new ParserVal(val_peek(0).obj);
         }
 break;
 case 57:
-//#line 409 "gramatica.y"
+//#line 413 "gramatica.y"
 {
             Nodo nodo_izq = (Nodo)val_peek(2).obj;
             Nodo nodo_der = (Nodo)val_peek(0).obj;
@@ -1086,7 +1096,7 @@ case 57:
         }
 break;
 case 58:
-//#line 415 "gramatica.y"
+//#line 419 "gramatica.y"
 {
             Nodo nodo_izq = (Nodo)val_peek(2).obj;
             Nodo nodo_der = (Nodo)val_peek(0).obj;
@@ -1094,20 +1104,20 @@ case 58:
         }
 break;
 case 59:
-//#line 422 "gramatica.y"
+//#line 426 "gramatica.y"
 {
             Nodo nodo_hijo = (Nodo)val_peek(0).obj;
             yyval = new ParserVal(new NodoOperacion("UMINUS", nodo_hijo, null));
         }
 break;
 case 60:
-//#line 430 "gramatica.y"
+//#line 434 "gramatica.y"
 {
             yyval = new ParserVal(val_peek(0).obj);
         }
 break;
 case 61:
-//#line 434 "gramatica.y"
+//#line 438 "gramatica.y"
 {
             Nodo nodo_izq = (Nodo)val_peek(2).obj;
             Nodo nodo_der = (Nodo)val_peek(0).obj;
@@ -1115,7 +1125,7 @@ case 61:
         }
 break;
 case 62:
-//#line 440 "gramatica.y"
+//#line 444 "gramatica.y"
 {
             Nodo nodo_izq = (Nodo)val_peek(2).obj;
             Nodo nodo_der = (Nodo)val_peek(0).obj;
@@ -1123,49 +1133,49 @@ case 62:
         }
 break;
 case 63:
-//#line 449 "gramatica.y"
+//#line 453 "gramatica.y"
 {
             yyval = new ParserVal(new NodoVariable(val_peek(0).sval));
         }
 break;
 case 64:
-//#line 453 "gramatica.y"
+//#line 457 "gramatica.y"
 {
             yyval = new ParserVal(new NodoConstante(val_peek(0).ival, "long"));
         }
 break;
 case 65:
-//#line 457 "gramatica.y"
+//#line 461 "gramatica.y"
 {
             yyval = new ParserVal(new NodoConstante(val_peek(0).dval, "dfloat"));
         }
 break;
 case 66:
-//#line 461 "gramatica.y"
+//#line 465 "gramatica.y"
 {
             yyval = new ParserVal(val_peek(0).obj);
         }
 break;
 case 67:
-//#line 471 "gramatica.y"
+//#line 475 "gramatica.y"
 {
             yyval = new ParserVal(new NodoInvocacion(val_peek(3).sval, (ArrayList<NodoParametroReal>)val_peek(1).obj));
         }
 break;
 case 68:
-//#line 478 "gramatica.y"
+//#line 482 "gramatica.y"
 {
             yyval = new ParserVal(null);
         }
 break;
 case 69:
-//#line 482 "gramatica.y"
+//#line 486 "gramatica.y"
 {
             yyval = new ParserVal(val_peek(0).obj);
         }
 break;
 case 70:
-//#line 489 "gramatica.y"
+//#line 493 "gramatica.y"
 {   
             ArrayList<NodoParametroReal> lista = new ArrayList<>();
             lista.add((NodoParametroReal)val_peek(0).obj);
@@ -1173,7 +1183,7 @@ case 70:
         }
 break;
 case 71:
-//#line 495 "gramatica.y"
+//#line 499 "gramatica.y"
 {
             ArrayList<NodoParametroReal> lista = (ArrayList<NodoParametroReal>)val_peek(2).obj;
             lista.add((NodoParametroReal)val_peek(0).obj);
@@ -1181,26 +1191,26 @@ case 71:
         }
 break;
 case 72:
-//#line 504 "gramatica.y"
+//#line 508 "gramatica.y"
 {
             yyval = new ParserVal(new NodoParametroReal((Nodo)val_peek(2).obj, val_peek(0).sval));
         }
 break;
 case 73:
-//#line 511 "gramatica.y"
+//#line 515 "gramatica.y"
 {
             NodoConstante nodoCadena = new NodoConstante(val_peek(1).sval, "string");
             yyval = new ParserVal(new NodoPrint(nodoCadena));
         }
 break;
 case 74:
-//#line 516 "gramatica.y"
+//#line 520 "gramatica.y"
 {
             yyval = new ParserVal(new NodoPrint((Nodo)val_peek(1).obj));
         }
 break;
 case 75:
-//#line 524 "gramatica.y"
+//#line 528 "gramatica.y"
 {
             ArrayList<Nodo> expresiones = (ArrayList<Nodo>)val_peek(1).obj; 
             if (funcionActual == null) {
@@ -1212,7 +1222,7 @@ case 75:
         }
 break;
 case 76:
-//#line 538 "gramatica.y"
+//#line 542 "gramatica.y"
 {
             String tipoParamLambda = val_peek(8).sval;
             String nombreParamLambda = val_peek(7).sval;
@@ -1223,24 +1233,24 @@ case 76:
         }
 break;
 case 77:
-//#line 550 "gramatica.y"
+//#line 554 "gramatica.y"
 {
             yyval = new ParserVal(new NodoArgumento(val_peek(0).sval, "id"));
         }
 break;
 case 78:
-//#line 554 "gramatica.y"
+//#line 558 "gramatica.y"
 {
             yyval = new ParserVal(new NodoArgumento(val_peek(0).ival, "long"));
         }
 break;
 case 79:
-//#line 558 "gramatica.y"
+//#line 562 "gramatica.y"
 {
             yyval = new ParserVal(new NodoArgumento(val_peek(0).dval, "dfloat"));
         }
 break;
-//#line 1167 "Parser.java"
+//#line 1177 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

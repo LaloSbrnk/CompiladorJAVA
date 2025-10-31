@@ -12,7 +12,10 @@ public class AS9 extends AccionSemantica {
         AnalizadorLexico.indice_caracter_leer--;
 
         // defensivo
-        if (token == null || token.getLexema() == null) return;
+        if (token == null || token.getLexema() == null) {
+         token.setId(Parser.YYERRCODE);
+            return;
+        }
         String lexema = token.getLexema();
 
         // Si ya está en la tabla, reutilizo
@@ -40,6 +43,7 @@ public class AS9 extends AccionSemantica {
                         "Linea " + AnalizadorLexico.numero_linea +
                         " / Posicion " + (AnalizadorLexico.indice_caracter_leer - lexema.length()) +
                         " - ERROR: Exponente con D debe llevar signo obligatorio (+/-).");
+                        token.setId(Parser.YYERRCODE);
                     return;
                 }
                 // parseo seguro del exponente (Integer es suficiente, si es muy grande el valor será Infinity)
@@ -50,6 +54,7 @@ public class AS9 extends AccionSemantica {
                 "Linea " + AnalizadorLexico.numero_linea +
                 " / Posicion " + (AnalizadorLexico.indice_caracter_leer - lexema.length()) +
                 " - ERROR: Número inválido en parte base o exponente (" + lexema + ")");
+                token.setId(Parser.YYERRCODE);
             return;
         }
 
@@ -78,6 +83,7 @@ public class AS9 extends AccionSemantica {
                 "Linea " + AnalizadorLexico.numero_linea +
                 " / Posicion " + (AnalizadorLexico.indice_caracter_leer - lexema.length()) +
                 " - ERROR: Constante de punto flotante fuera de rango (" + lexema + ")");
+                token.setId(Parser.YYERRCODE);
             return;
         }
 

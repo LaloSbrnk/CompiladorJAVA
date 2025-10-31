@@ -77,14 +77,14 @@ public class AnalizadorLexico {
     private void cargarMatrices(){
         matrizTransicion = new int[][]{
         /* 0  */    {1, 1, 1, 6, 7, ESTADO_ERROR, ESTADO_FINAL, 8, ESTADO_FINAL, 3, 3, 2, ESTADO_ERROR, 4, 5, 13, 14, 0, 0, 0, ESTADO_ERROR},
-        /* 1  */    {1, 1, 1, ESTADO_FINAL, 1, 1, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL},
+        /* 1  */     {1, 1, 1, ESTADO_FINAL, 1, 1, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL},
         /* 2  */    {ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL},
         /* 3  */    {ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL},
         /* 4  */    {ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_FINAL, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR},
         /* 5  */    {ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL},
         /* 6  */    {ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, 6, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL},
         /* 7  */    {ESTADO_ERROR, ESTADO_FINAL, ESTADO_ERROR, ESTADO_ERROR, 7, ESTADO_ERROR, ESTADO_ERROR, 9, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR},
-        /* 8  */    {ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, 9, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR},
+        /* 8  */    {ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, 9, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL},
         /* 9  */    {10, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, 9, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL},
         /* 10  */    {ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, 11, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, 11, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR},
         /* 11 */    {ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, 12, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR, ESTADO_ERROR},
@@ -95,7 +95,7 @@ public class AnalizadorLexico {
         /* 16 */    {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 0, 15, 15, 15, 15}
         };
         matrizAcciones = new AccionSemantica[][]{
-        /* 0  */ {new AS1(), new AS1(), new AS1(), new AS1(), new AS1(), new ASE(), new AS2(), new AS1(), new AS2(), new AS1(), new AS1(), new AS1(), new ASE(), new AS1(), new AS1(), null, null, null, null, null, new ASE()},
+        /* 0 */  {new AS1(), new AS1(), new AS1(), new AS1(), new AS1(), new ASE(), new AS2(), new AS1(), new AS2(), new AS1(), new AS1(), new AS1(), new ASE(), new AS1(), new AS1(), null, null, new AS11(), null, null, new ASE()},
         /* 1  */ {new AS3(), new AS3(), new AS3(), new AS4(), new AS3(), new AS3(), new AS4(), new AS4(), new AS4(), new AS4(), new AS4(), new AS4(), new AS4(), new AS4(), new AS4(), new AS4(), new AS4(), new AS4(), new AS4(), new AS4(), new AS4()},
         /* 2  */ {new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS6(), new AS6(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5()},
         /* 3  */ {new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS6(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5()},
@@ -103,14 +103,14 @@ public class AnalizadorLexico {
         /* 5  */ {new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS6(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5()},
         /* 6  */ {new AS7(), new AS7(), new AS7(), new AS3(), new AS7(), new AS7(), new AS7(), new AS7(), new AS7(), new AS7(), new AS7(), new AS7(), new AS7(), new AS7(), new AS7(), new AS7(), new AS7(), new AS7(), new AS7(), new AS7(), new AS7()},
         /* 7  */ {new ASE(), new AS8(), new ASE(), new ASE(), new AS3(), new ASE(), new ASE(), new AS3(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE()},
-        /* 8  */ {new ASE(), new ASE(), new ASE(), new ASE(), new AS3(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE()},
+        /* 8  */ {new AS5(), new AS5(), new AS5(), new AS5(), new AS3(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5(), new AS5()},
         /* 9  */ {new AS3(), new AS9(), new AS9(), new AS9(), new AS3(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9()},
         /* 10 */ {new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new AS3(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new AS3(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE()},
         /* 11 */ {new ASE(), new ASE(), new ASE(), new ASE(), new AS3(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE()},
         /* 12 */ {new AS9(), new AS9(), new AS9(), new AS9(), new AS3(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9(), new AS9()},
         /* 13 */ {new AS3(), new AS3(), new AS3(), new AS3(), new AS3(), new AS3(), new AS3(), new AS3(), new AS3(), new AS3(), new AS3(), new AS3(), new AS3(), new AS3(), new AS3(), new AS10(), new AS3(), new ASE(), new AS3(), new AS3(), new AS3()},
         /* 14 */ {new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), new ASE(), null, new ASE(), new ASE(), new ASE(), new ASE()},
-        /* 15 */ {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+        /* 15 */ {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, new AS11(), null, null, null},
         /* 16 */ {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
     };
 
@@ -182,11 +182,22 @@ public class AnalizadorLexico {
                 AccionSemantica accionSemantica = matrizAcciones[estado_actual][j];
                 int proximo_estado = matrizTransicion[estado_actual][j];
 
-                //ejecuto accion
-                if (accionSemantica != null)
-                    accionSemantica.ejecutar(newToken, caracter);
+            // --- BLOQUE CORREGIDO ---
+            // Actualizamos el estado AHORA, para que ASE sepa dónde ocurrió el error
+            int estado_previo = estado_actual;
+            estado_actual = proximo_estado;
 
-                if (proximo_estado == ESTADO_FINAL){
+            //ejecuto accion
+            if (accionSemantica != null) {
+                // Pasamos el estado *previo* a ASE
+                if (accionSemantica instanceof ASE) {
+                    AnalizadorLexico.estado_actual = estado_previo; // Truco para que ASE reporte el estado correcto
+                }
+                accionSemantica.ejecutar(newToken, caracter);
+            }
+
+            if (estado_actual == ESTADO_FINAL){
+            // --- FIN BLOQUE CORREGIDO ---
 
                     // ---- INICIO DEL BLOQUE CORREGIDO ----
 
@@ -231,12 +242,20 @@ public class AnalizadorLexico {
                     System.out.println("DEBUG -> Token Reconocido: " + tokenId);
                     return tokenId; // Retornamos el ID del token
                     //return newToken.getId(); //retorna token valido
-                } else if (proximo_estado == ESTADO_ERROR){
-                    estado_actual = 0;
-                    newToken = new Token();
-                } else {
-                    estado_actual = proximo_estado;
+                } else if (estado_actual == ESTADO_ERROR){
+                // --- CORRECCIÓN ---
+                // Si fuimos a ESTADO_ERROR, pero una AS (como ASE o AS7)
+                // igualmente asignó un ID (ej. 0), debemos devolver ese token
+                // para que el parser pueda aplicar la regla 'error'.
+                if (newToken.getId() != -1) { // -1 es el ID por defecto
+                    System.out.println("DEBUG -> Token de Error Reconocido: " + newToken.getId());
+                    this.yylval = new ParserVal(); // Devolver yylval vacío
+                    return newToken.getId();
                 }
+                // Si no se asignó ID, simplemente reseteamos
+                estado_actual = 0;
+                newToken = new Token();
+            }
             } //fin while(true)
         } catch (IOException e) {
             throw new RuntimeException(e);

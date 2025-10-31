@@ -16,7 +16,7 @@ public class NodoLambdaInline extends Nodo {
         this.argumento = argumento;
     }
 
-    @Override
+@Override
     public String chequear(TablaDeAmbitos TdA) {
         System.out.println("DEBUG: Chequeando Lambda Inline");
 
@@ -44,7 +44,7 @@ public class NodoLambdaInline extends Nodo {
 
         // --- SIMULACION DE EJECUCION CON AMBITO ---
         // Abrimos un ambito TEMPORAL para la lambda
-        TdA.abrirAmbito();
+        TdA.abrirAmbito("LAMBDA"); // <-- CORRECCIÓN: Se agrega nombre de ámbito
 
         // Declaramos el parametro DENTRO de ese ambito temporal
         AtributosTokens attrsParam = new AtributosTokens(TiposToken.IDENTIFICADOR);
@@ -56,7 +56,7 @@ public class NodoLambdaInline extends Nodo {
             TdA.cerrarAmbito(); 
             return "error";
         } else {
-             System.out.println("DEBUG: Lambda: Registrado parametro '" + this.nombreParam + "' tipo '" + this.tipoParam + "' en ambito temporal.");
+             System.out.println("DEBUG: Lambda: Registrado parametro '" + attrsParam.getMangledName() + "' tipo '" + this.tipoParam + "' en ambito temporal.");
         }
 
 

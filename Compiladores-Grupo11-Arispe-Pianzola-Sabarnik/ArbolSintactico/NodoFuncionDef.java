@@ -34,31 +34,35 @@ public class NodoFuncionDef extends Nodo {
         this.cuerpo = cuerpo;
     }
     
-    @Override
+@Override
     public String chequear(TablaDeAmbitos TdA) {
         System.out.println("DEBUG: Chequeando funcion '" + this.nombre + "'");
 
-        // --- MANEJO DE AMBITO ---
-        // Abrimos un nuevo ambito para la funcion
-        TdA.abrirAmbito();
+        // 1. La función en sí misma se declara en el ámbito *actual* (padre)
+        String mangledName = this.nombre + TdA.getMangledScope(); // Ej: "F1:MAIN"
+        this.atributosFuncion.setMangledName(mangledName);
         
-        HashMap<String, AtributosTokens> ambitoFuncion = TdA.getAmbitoActual();
-        if (this.atributosFuncion != null) { // Si la funcion se registro bien
-            this.atributosFuncion.setAmbitoLocal(ambitoFuncion);
-        }
+        // (El parser ya puso 'atributosFuncion' en la tabla global con la clave simple,
+        // ahora lo actualizamos con la clave mangled y los atributos correctos)
+        AnalizadorLexico.tablaSimbolos.put(mangledName, this.atributosFuncion);
 
-        //Agregamos los parametros al nuevo ambito 
+
+        // --- MANEJO DE AMBITO ---
+        // 2. Abrimos un nuevo ambito para la funcion
+        TdA.abrirAmbito(this.nombre); // Pila -> [..., "F1"]
+        
+        // 3. Agregamos los parametros al nuevo ambito (ej: "P1:MAIN:F1")
         if (parametros != null) {
             for (NodoParametro p : parametros) {
                 p.chequear(TdA); 
             }
         }
 
-        // Chequeamos el cuerpo de la funcion DENTRO del nuevo ambito
-        //    (Las NodoDeclaracion dentro del cuerpo tambien usaran TdA.agregar())
+        // 4. Chequeamos el cuerpo de la funcion DENTRO del nuevo ambito
         cuerpo.chequear(TdA);
 
-        TdA.cerrarAmbito();
+        // 5. Cerramos el ámbito
+        TdA.cerrarAmbito(); // Pila -> [...]
         // --- FIN MANEJO DE AMBITO ---
 
         System.out.println("DEBUG: Fin chequeo funcion '" + this.nombre + "'");

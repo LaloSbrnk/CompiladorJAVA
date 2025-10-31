@@ -1,5 +1,6 @@
 package AccionesSemanticas;
 import CompiladoresMain.*;
+import CompiladoresMain.Parser;
 
 import java.math.BigInteger;
 
@@ -9,8 +10,10 @@ public class AS8 extends AccionSemantica {
     public void ejecutar(Token token, char c) {
         java.math.BigInteger big = null;
         // Protecciones básicas
-        if (token == null || token.getLexema() == null) return;
-
+        if (token == null || token.getLexema() == null) {
+        token.setId(Parser.YYERRCODE);
+        return;
+        }
         // lexema tal cual viene (sin signo — según tu aclaración)
         String lexema = token.getLexema();
 
@@ -32,6 +35,7 @@ public class AS8 extends AccionSemantica {
                 "Linea " + AnalizadorLexico.numero_linea +
                 " / Posicion " + (AnalizadorLexico.indice_caracter_leer - lexema.length()) +
                 " - ERROR: Literal entero vacío antes de sufijo L");
+                token.setId(Parser.YYERRCODE);
             return;
         }
         // Validar con BigInteger para detectar overflow
@@ -42,6 +46,7 @@ public class AS8 extends AccionSemantica {
                 "Linea " + AnalizadorLexico.numero_linea +
                 " / Posicion " + (AnalizadorLexico.indice_caracter_leer - lexema.length()) +
                 " - ERROR: Formato numérico inválido para literal entero");
+                token.setId(Parser.YYERRCODE);
             return;
         }
         // Chequear rango de long

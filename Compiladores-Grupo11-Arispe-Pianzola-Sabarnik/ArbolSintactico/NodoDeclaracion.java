@@ -13,32 +13,36 @@ public class NodoDeclaracion extends Nodo {
         this.variables = variables;
     }
 
-    @Override
+@Override
     public String chequear(TablaDeAmbitos TdA) {
+        String scopeActual = TdA.getMangledScope(); // Ej: ":MAIN:F1"
+
         for (String nombreVar : variables) {
             
-            // 1. Chequea si ya existe Y TIENE USO en el AMBITO ACTUAL
-            AtributosTokens attrsEnAmbitoActual = TdA.getAmbitoActual().get(nombreVar);
+            String mangledName = nombreVar + scopeActual; // Ej: "X:MAIN:F1"
 
-            if (attrsEnAmbitoActual != null && attrsEnAmbitoActual.getUso() != null) {
+            // 1. Chequea si ya existe ESE nombre en la tabla general
+            AtributosTokens attrs = AnalizadorLexico.tablaSimbolos.get(mangledName);
+
+            if (attrs != null && attrs.getUso() != null) {
                 // Si existe y YA tiene un uso (variable, parametro, funcion), es redeclaracion
-                System.err.println("ERROR Semantico: Redeclaracion de variable '" + nombreVar + "'.");
+                System.err.println("ERROR Semantico: Redeclaracion de variable '" + nombreVar + "' en el ambito " + scopeActual);
             } else {
-                // No existe en el ambito actual, o existe pero sin uso (del lexer)
-                // Obtenemos el atributo global (del lexer) para actualizarlo
-                AtributosTokens attrsGlobal = AnalizadorLexico.tablaSimbolos.get(nombreVar);
-                if (attrsGlobal == null) { // No deberia pasar si el lexer funciona bien
-                    attrsGlobal = new AtributosTokens(TiposToken.IDENTIFICADOR);
-                    AnalizadorLexico.tablaSimbolos.put(nombreVar, attrsGlobal);
+                // Si attrs es null, significa que el lexer no lo vio.
+                // Si no es null, es una entrada del lexer (ID) que vamos a "promocionar"
+                if (attrs == null) {
+                    attrs = new AtributosTokens(TiposToken.IDENTIFICADOR);
                 }
                 
                 // Seteamos sus propiedades
-                attrsGlobal.setTipoDato(this.tipo);
-                attrsGlobal.setUso("variable");
+                attrs.setTipoDato(this.tipo);
+                attrs.setUso("variable");
                 
-                // Lo ponemos (o sobreescribimos) en el ambito actual
-                TdA.getAmbitoActual().put(nombreVar, attrsGlobal);
-                System.out.println("DEBUG: Declarada variable '" + nombreVar + "' con tipo '" + this.tipo + "'");
+                // Lo ponemos (o sobreescribimos la entrada del lexer) en la tabla general
+                // ¡Usamos TdA.agregar() que ya hace esto y setea el mangledName!
+                TdA.agregar(nombreVar, attrs);
+                
+                System.out.println("DEBUG: Declarada variable '" + mangledName + "' con tipo '" + this.tipo + "'");
             }
         }
         return "void"; 

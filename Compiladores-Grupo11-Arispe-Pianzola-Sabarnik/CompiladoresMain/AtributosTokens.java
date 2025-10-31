@@ -15,6 +15,8 @@ public class AtributosTokens {
     private List<String> tiposRetorno = null; // Para funciones (Tema 20)
     private ArrayList<NodoParametro> parametros = null; // Para funciones
     private HashMap<String, AtributosTokens> ambitoLocal = null;
+    private String mangledName = null;
+    private String modoPasaje = null;
 
     public AtributosTokens(int idToken) {
         this.cantidad = 0;
@@ -39,6 +41,7 @@ public class AtributosTokens {
     }
 
     public void decrementarCantidad() {this.cantidad--; }
+    
 
     public void setNombre_var(String nombre_var) {
         this.nombre_var = nombre_var;
@@ -99,12 +102,30 @@ public class AtributosTokens {
     public void setAmbitoLocal(HashMap<String, AtributosTokens> ambitoLocal) {
         this.ambitoLocal = ambitoLocal;
     }
+
+    public String getMangledName() {
+        return mangledName;
+    }
+
+    public void setMangledName(String mangledName) {
+        this.mangledName = mangledName;
+    }
+    public String getModoPasaje() {
+        return modoPasaje;
+    }
+
+    public void setModoPasaje(String modoPasaje) {
+        this.modoPasaje = modoPasaje;
+    }
     
-    @Override
+@Override
     public String toString() {
         String impresion = "";
+        if (mangledName != null) {
+            impresion += "Mangled: " + mangledName; // Info de debug
+        }
         if (uso != null) {
-            impresion += "Uso: " + uso;
+            impresion += ", Uso: " + uso;
         }
         if (tipoDato != null) {
             impresion += ", Tipo de Dato: " + tipoDato;

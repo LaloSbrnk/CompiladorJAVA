@@ -9,50 +9,55 @@ public class NodoVariable extends Nodo {
         this.nombre = nombre;
     }
 
-    @Override
+@Override
     public String chequear(TablaDeAmbitos TdA) {
         
+        AtributosTokens attrs = null;
+
         if (this.nombre.contains(".")) {
-            // Es un nombre prefijado (ej. "FUNCION1.VAR_X")
-            String[] partes = this.nombre.split("\\.", 2); // Divide en maximo 2 partes por el punto
+            // --- Caso 1: Variable con prefijo (Tema 23) ---
+            String[] partes = this.nombre.split("\\.", 2); 
             String nombreModulo = partes[0]; 
-            String nombreVarLocal = partes[1]; 
+            String nombreVarLocal = partes[1];
+            String rootScope = TdA.getRootScopeName();
 
-            // Buscamos el Modulo/Funcion en la TdA actual
-            AtributosTokens attrsModulo = TdA.buscar(nombreModulo);
+            if (rootScope != null && nombreModulo.equals(rootScope)) {
+                // --- Caso 1a: Prefijo es el Root Scope (ej: "MAIN.A") ---
+                // Construimos el nombre mangled global: "A:MAIN"
+                String mangledName = nombreVarLocal + ":" + rootScope;
+                
+                // Buscamos directamente en la tabla de símbolos global
+                attrs = AnalizadorLexico.tablaSimbolos.get(mangledName);
+                
+                if (attrs == null || attrs.getUso() == null) {
+                     System.err.println("ERROR Semantico: Variable '" + nombreVarLocal + "' no declarada en el ambito global '" + rootScope + "'.");
+                    return "error";
+                }
 
-            // Chequeamos si existe, es funcion y tiene ambito local
-            if (attrsModulo == null || !attrsModulo.getUso().equals("funcion") || attrsModulo.getAmbitoLocal() == null) {
-                System.err.println("ERROR Semantico: El prefijo '" + nombreModulo + "' no corresponde a una funcion declarada o accesible.");
-                return "error";
+            } else {
+                // --- Caso 1b: Prefijo es una funcion (ej: "F1.X") ---
+                // Usamos la lógica de búsqueda prefijada estándar
+                attrs = TdA.buscarPrefijado(this.nombre);
+                
+                if (attrs == null) {
+                    // El error ya fue reportado por buscarPrefijado
+                    return "error";
+                }
             }
-
-            // Buscamos la variable DENTRO del ambito local de la funcion
-            HashMap<String, AtributosTokens> ambitoModulo = attrsModulo.getAmbitoLocal();
-            AtributosTokens attrsVar = ambitoModulo.get(nombreVarLocal);
-
-            // Chequeamos si la variable existe dentro de la funcion
-            if (attrsVar == null || attrsVar.getUso() == null) {
-                System.err.println("ERROR Semantico: La funcion '" + nombreModulo + "' no contiene una variable o parametro llamado '" + nombreVarLocal + "'.");
-                return "error";
-            }
-            
-            // Devolvemos el tipo de la variable prefijada
-             System.out.println("DEBUG: Acceso prefijado '" + this.nombre + "' OK. Tipo: " + attrsVar.getTipoDato());
-            return attrsVar.getTipoDato();
 
         } else {
-            // --- (Variable no prefijada) ---
-            AtributosTokens attrs = TdA.buscar(this.nombre);
+            // --- Caso 2: Variable sin prefijo (ej: "A" dentro de la función) ---
+            // Busca "nombre" caminando la pila de ámbitos (de adentro hacia afuera).
+            attrs = TdA.buscar(this.nombre);
 
             if (attrs == null || attrs.getUso() == null) {
-                System.err.println("ERROR Semantico: Variable '" + this.nombre + "' no declarada en este ambito.");
+                System.err.println("ERROR Semantico: Variable '" + this.nombre + "' no declarada en este ambito o ambitos superiores.");
                 return "error";
             }
-            
-            // Devolvemos el tipo de la variable local/global
-            return attrs.getTipoDato();
         }
+            
+        // Devolvemos el tipo de la variable encontrada
+        return attrs.getTipoDato();
     }
 
     public String getNombre(){

@@ -232,14 +232,18 @@ parametros_formales
 parametro_formal
     : opt_sem_pasaje tipo IDENTIFICADOR
         {
-            yyval = new ParserVal(new NodoParametro(val_peek(0).sval, val_peek(1).sval));
+            // $3=ID(nombre), $2=tipo, $1=modoPasaje
+            yyval = new ParserVal(new NodoParametro((String)val_peek(0).sval, (String)val_peek(1).sval, (String)val_peek(2).sval));
         }
     ;
 
 opt_sem_pasaje
     : /* vacío */
+        { yyval = new ParserVal(null); }
     | CV SL
+        { yyval = new ParserVal("cv sl"); }
     | CV LE
+        { yyval = new ParserVal("cv le"); }
     ;
 
 cuerpo_funcion
@@ -601,10 +605,7 @@ public static void main(String[] args) {
             // Crear la Tabla de Ambitos, pasando la TS global del Lexer
             TablaDeAmbitos tablaDeAmbitos = new TablaDeAmbitos(AnalizadorLexico.tablaSimbolos);
 
-            // Abrir el ambito global (carga la TS del lexer en la pila)
-            tablaDeAmbitos.abrirAmbitoGlobal();
-
-            // Llamar al 'chequear' de la raiz del arbol
+            // El 'arbol' (NodoPrograma) se encargará de abrir el primer ámbito.
             arbol.chequear(tablaDeAmbitos);
 
             System.out.println("--- Chequeo Semantico Finalizado ---");
