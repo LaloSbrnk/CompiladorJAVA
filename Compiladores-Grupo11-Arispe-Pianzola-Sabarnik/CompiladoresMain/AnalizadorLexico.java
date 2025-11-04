@@ -172,11 +172,9 @@ public class AnalizadorLexico {
                         j++;
                 }
                 if (!col_correcta) {
-                // Si el bucle terminó sin encontrar el símbolo, es "Otro".
                     j = 20; // El índice de la columna "Otro"
                 }
 
-                //System.out.println("DEBUG -> Estado: " + estado_actual + ", Carácter: '" + caracter + "', Columna Detectada: " + j);
 
                 //consulto matrices
                 AccionSemantica accionSemantica = matrizAcciones[estado_actual][j];
@@ -188,10 +186,8 @@ public class AnalizadorLexico {
 
                 if (proximo_estado == ESTADO_FINAL){
 
-                    // ---- INICIO DEL BLOQUE CORREGIDO ----
 
                     int tokenId = newToken.getId();
-                    //System.out.println("DEBUG -> Token Finalizado. ID: " + tokenId + ", Lexema: '" + newToken.getLexema() + "'"); // <-- DEBUG ADICIONAL
 
                     
                     // Creamos un nuevo ParserVal para yylval. Por defecto está vacío.
@@ -226,11 +222,9 @@ public class AnalizadorLexico {
                         // Para otros tokens (palabras reservadas, símbolos), no se necesita
                         // pasar un valor, por lo que yylval puede ir vacío.
                     }
-                    // ---- FIN DEL BLOQUE CORREGIDO ----
 
                     System.out.println("DEBUG -> Token Reconocido: " + tokenId);
                     return tokenId; // Retornamos el ID del token
-                    //return newToken.getId(); //retorna token valido
                 } else if (proximo_estado == ESTADO_ERROR){
                     estado_actual = 0;
                     newToken = new Token();
@@ -253,7 +247,9 @@ public class AnalizadorLexico {
         }
     }
 
-    // --- Programa Principal para Probar ---// 
+    
+// --- Programa Principal para Probar ---// 
+
 public static void main(String[] args) {
     if (args.length == 0) {
         System.out.println("Error: Debes pasar la ruta del archivo a compilar como argumento.");

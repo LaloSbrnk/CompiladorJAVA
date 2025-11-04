@@ -11,7 +11,6 @@ public class AS6 extends AccionSemantica {
             token.setId(atributos.getIdToken());
             atributos.incrementarCantidad();
         } else {
-            // Si no se encuentra, solo se registra el error.
             AnalizadorLexico.errores_y_warnings.add("Error interno: Operador '" + token.getLexema() + "' no encontrado en la tabla de símbolos.");
         }
     }

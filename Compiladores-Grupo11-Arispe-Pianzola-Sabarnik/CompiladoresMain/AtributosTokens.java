@@ -1,10 +1,5 @@
 package CompiladoresMain;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import ArbolSintactico.NodoParametro;
-
 public class AtributosTokens {
     private int cantidad;
     private int idToken;
@@ -12,9 +7,6 @@ public class AtributosTokens {
     private String tipoDato = null;
     private Object valor = null;
     private String nombre_var = null;
-    private List<String> tiposRetorno = null; // Para funciones (Tema 20)
-    private ArrayList<NodoParametro> parametros = null; // Para funciones
-    private HashMap<String, AtributosTokens> ambitoLocal = null;
 
     public AtributosTokens(int idToken) {
         this.cantidad = 0;
@@ -26,6 +18,7 @@ public class AtributosTokens {
         this.idToken = idToken;
     }
 
+//manejo de cantidad por las dudas
     public int getCantidad() {
         return cantidad;
     }
@@ -39,6 +32,7 @@ public class AtributosTokens {
     }
 
     public void decrementarCantidad() {this.cantidad--; }
+//manejo de cantidad por las dudas
 
     public void setNombre_var(String nombre_var) {
         this.nombre_var = nombre_var;
@@ -76,30 +70,6 @@ public class AtributosTokens {
         this.valor = valor;
     }
 
-    public List<String> getTiposRetorno() {
-        return tiposRetorno;
-    }
-
-    public void setTiposRetorno(List<String> tiposRetorno) {
-        this.tiposRetorno = tiposRetorno;
-    }
-
-    public ArrayList<NodoParametro> getParametros() {
-        return parametros;
-    }
-
-    public void setParametros(ArrayList<NodoParametro> parametros) {
-        this.parametros = parametros;
-    }
-
-    public HashMap<String, AtributosTokens> getAmbitoLocal() {
-        return ambitoLocal;
-    }
-
-    public void setAmbitoLocal(HashMap<String, AtributosTokens> ambitoLocal) {
-        this.ambitoLocal = ambitoLocal;
-    }
-    
     @Override
     public String toString() {
         String impresion = "";

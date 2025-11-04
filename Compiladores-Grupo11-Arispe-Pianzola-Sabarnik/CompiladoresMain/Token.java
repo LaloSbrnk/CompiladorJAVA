@@ -5,7 +5,6 @@ public class Token {
     private String lexema;
 
     public Token(){
-    // inicializacion diferente
         this.id = -1;
         this.lexema = "";
     }

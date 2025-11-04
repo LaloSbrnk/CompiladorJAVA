@@ -8,33 +8,27 @@ public class AS9 extends AccionSemantica {
 
     @Override
     public void ejecutar(Token token, char c) {
-        // mantener comportamiento original (volver a leer el caracter)
         AnalizadorLexico.indice_caracter_leer--;
 
-        // defensivo
         if (token == null || token.getLexema() == null) return;
         String lexema = token.getLexema();
 
-        // Si ya está en la tabla, reutilizo
         AtributosTokens atributosTokens = AnalizadorLexico.tablaSimbolos.get(lexema);
         if (atributosTokens != null) {
             token.setId(atributosTokens.getIdToken());
             atributosTokens.incrementarCantidad();
             return;
         }
-        // Separar parte base y (si hay) exponente
         int posD = lexema.indexOf('D'); 
         String baseStr = (posD != -1) ? lexema.substring(0, posD) : lexema;
         double base;
         int exponente = 0;
 
         try {
-            // Double.parseDouble acepta "+.5", "5." y ".5"
             base = Double.parseDouble(baseStr);
 
             if (posD != -1) {
                 String expStr = lexema.substring(posD + 1); // empieza con + o -
-                // por seguridad comprobamos que el signo del exponente esté presente
                 if (expStr.length() < 2 || (expStr.charAt(0) != '+' && expStr.charAt(0) != '-')) {
                     AnalizadorLexico.errores_y_warnings.add(
                         "Linea " + AnalizadorLexico.numero_linea +
@@ -42,7 +36,6 @@ public class AS9 extends AccionSemantica {
                         " - ERROR: Exponente con D debe llevar signo obligatorio (+/-).");
                     return;
                 }
-                // parseo seguro del exponente (Integer es suficiente, si es muy grande el valor será Infinity)
                 exponente = Integer.parseInt(expStr); // puede lanzar NumberFormatException
             }
         } catch (NumberFormatException ex) {
@@ -61,9 +54,6 @@ public class AS9 extends AccionSemantica {
             valor = base;
         }
 
-        // Validación de rango según tu imagen:
-        //  2.2250738585072014D-308 < |x| < 1.7976931348623157D+308  OR  x == 0.0
-        // Usamos Double.MIN_NORMAL (≈2.2250738585072014e-308) y Double.MAX_VALUE
         double abs = Math.abs(valor);
         boolean numeroValido = false;
 

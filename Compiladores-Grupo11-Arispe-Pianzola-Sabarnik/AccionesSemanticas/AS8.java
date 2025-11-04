@@ -11,7 +11,6 @@ public class AS8 extends AccionSemantica {
         // Protecciones básicas
         if (token == null || token.getLexema() == null) return;
 
-        // lexema tal cual viene (sin signo — según tu aclaración)
         String lexema = token.getLexema();
 
         // Si ya existe en la tabla de símbolos, reutilizo y retorno
@@ -22,7 +21,6 @@ public class AS8 extends AccionSemantica {
             return;
         }
 
-        // Detectar sufijo L o l (aceptamos mayúscula y minúscula)
         boolean tieneL = lexema.endsWith("L") || lexema.endsWith("l");
 
         // Quitar sufijo L si existe, obteniendo la parte de dígitos
@@ -34,7 +32,7 @@ public class AS8 extends AccionSemantica {
                 " - ERROR: Literal entero vacío antes de sufijo L");
             return;
         }
-        // Validar con BigInteger para detectar overflow
+
         try {
             big = new BigInteger(digitos);
         } catch (NumberFormatException ex) {
@@ -57,7 +55,6 @@ public class AS8 extends AccionSemantica {
 
         long valorLong = big.longValue();
 
-        // Crear atributos y guardarlos en tabla usando la clave tal cual (sin signo por tu aclaración)
         atributosTokens = new AtributosTokens(1, TiposToken.CTE_LONG);
         atributosTokens.setValor(valorLong); // guardamos la magnitud (el semántico aplicará el signo cuando corresponda)
         atributosTokens.setNombre_var("cte_" + AnalizadorLexico.cant_constantes);
