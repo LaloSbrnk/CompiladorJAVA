@@ -1,0 +1,277 @@
+package CompiladoresMain;
+
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
+
+/**
+ * Programa de prueba flexible para AnalizadorLexico.
+ *
+ * Explicación corta: este driver intenta (por reflexión) crear una instancia
+ * de la clase AnalizadorLexico (usando Reader, String o InputStream si existe),
+ * localizar un método que devuelva tokens (nextToken, siguienteToken, yylex, etc.)
+ * y mostrar los tokens encontrados inspeccionando el objeto Token vía reflexión.
+ *
+ * Esto evita atarnos a una firma exacta de tus clases y debería funcionar
+ * con la mayoría de analizadores generados a mano o con herramientas como JFlex.
+ *
+ * Ajustes posibles: si tu AnalizadorLexico está en un paquete, compila este archivo
+ * en el mismo paquete o añade la declaración "package ...;" arriba.
+ */
+public class PruebasAnalizadorLexico {
+
+    static String[] tests = new String[] {
+        "int x = 42;",
+        "// comentario de linea\nvar y = x + 1;",
+        "\"cadena con espacios y \\\"escapes\\\"\"",
+        "123 0x1A 0777",
+        "if(x>0) { funcion(); } else otro();",
+        "/* comentario multilinea */ palabra_final",
+        "identificador_con_guiones y+z*3 / 7;",
+        "" // prueba vacía
+    };
+
+    public static void main(String[] args) {
+        // Si pasás archivos como argumentos, se prueban; si no, se usan tests[]
+        if (args.length > 0) {
+            for (String fname : args) {
+                try {
+                    String input = readFileToString(new File(fname));
+                    runTest(input, "archivo:" + fname);
+                } catch (Exception e) {
+                    System.err.println("No pude leer " + fname + ": " + e);
+                }
+            }
+        } else {
+            for (int i = 0; i < tests.length; i++) {
+                runTest(tests[i], "caso_" + i);
+            }
+        }
+    }
+
+    static void runTest(String input, String tag) {
+        System.out.println("\n=== Test: " + tag + " ===");
+        try {
+            Class<?> analyzerClass = null;
+            // Intenta nombres comunes: sin paquete y con el paquete CompiladoresMain
+            String[] candidates = new String[] {
+                "AnalizadorLexico",
+                "CompiladoresMain.AnalizadorLexico"
+            };
+            for (String cn : candidates) {
+                try {
+                    analyzerClass = Class.forName(cn);
+                    break;
+                } catch (ClassNotFoundException ignored) { }
+            }
+            if (analyzerClass == null) {
+                throw new ClassNotFoundException("AnalizadorLexico (probados: " + Arrays.toString(candidates) + ")");
+            }
+
+            Object analyzer = createAnalyzerInstance(analyzerClass, input);
+            if (analyzer == null) {
+                System.err.println("No pude instanciar AnalizadorLexico. Revisa firmas y paquete.");
+                return;
+            }
+
+            Method tokenMethod = findTokenMethod(analyzerClass);
+            if (tokenMethod == null) {
+                System.err.println("No encontré un método para obtener tokens (nextToken, yylex, ...) en AnalizadorLexico.");
+                return;
+            }
+
+            boolean finished = false;
+            int count = 0;
+            while (!finished) {
+                Object tokenObj = tokenMethod.invoke(analyzer);
+                // Algunos analizadores devuelven null al EOF, otros devuelven un token con tipo EOF
+                if (tokenObj == null) break;
+
+                String s = describeToken(tokenObj);
+                System.out.printf("%3d: %s\n", ++count, s);
+
+                // Si el token tiene "EOF" o tipo 0, lo detectamos heurísticamente
+                if (looksLikeEOF(tokenObj)) break;
+                // seguridad para evitar loops infinitos
+                if (count > 10000) {
+                    System.err.println("Demasiados tokens (>10000). Abortando por seguridad.");
+                    break;
+                }
+            }
+            if (count == 0) System.out.println("(No se detectaron tokens)");
+        } catch (ClassNotFoundException e) {
+            System.err.println("La clase AnalizadorLexico no está en el classpath: " + e);
+        } catch (InvocationTargetException ite) {
+            System.err.println("Error al invocar el método de tokens: " + ite.getTargetException());
+            ite.getTargetException().printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Error en runTest: " + e);
+            e.printStackTrace();
+        }
+    }
+   // Intenta crear una instancia del analizador usando distintas firmas
+    static Object createAnalyzerInstance(Class<?> analyzerClass, String input) {
+        try {
+            // 1) Constructor(Reader)
+            try {
+                Constructor<?> c = analyzerClass.getConstructor(Reader.class);
+                return c.newInstance(new StringReader(input));
+            } catch (NoSuchMethodException ignored) {}
+
+            // 2) Constructor(InputStream)  <-- probar InputStream antes que String
+            try {
+                Constructor<?> c = analyzerClass.getConstructor(InputStream.class);
+                return c.newInstance(new ByteArrayInputStream(input.getBytes()));
+            } catch (NoSuchMethodException ignored) {}
+
+            // 3) Constructor(String)  <-- puede esperar un FILENAME; si falla por FileNotFound, hacemos fallback al InputStream
+            try {
+                Constructor<?> c = analyzerClass.getConstructor(String.class);
+                try {
+                    return c.newInstance(input);
+                } catch (InvocationTargetException ite) {
+                    Throwable cause = ite.getTargetException();
+                    // Si el constructor interpretó el String como path y lanzó FileNotFound, intentamos InputStream como fallback
+                    if (cause instanceof java.io.FileNotFoundException) {
+                        try {
+                            Constructor<?> c2 = analyzerClass.getConstructor(InputStream.class);
+                            return c2.newInstance(new ByteArrayInputStream(input.getBytes()));
+                        } catch (Exception ignored) {}
+                    }
+                    // si no fue FileNotFound, re-lanzamos la excepción para mostrar errores reales
+                    throw ite;
+                }
+            } catch (NoSuchMethodException ignored) {}
+
+            // 4) No-arg constructor + método setter (setInput, setReader, setSource)
+            try {
+                Constructor<?> c = analyzerClass.getConstructor();
+                Object inst = c.newInstance();
+                String[] setterNames = new String[] {"setInput", "setReader", "setSource", "setStream", "init"};
+                for (String setter : setterNames) {
+                    try {
+                        Method m = analyzerClass.getMethod(setter, Reader.class);
+                        m.invoke(inst, new StringReader(input));
+                        return inst;
+                    } catch (NoSuchMethodException ignored2) {}
+                    try {
+                        Method m = analyzerClass.getMethod(setter, InputStream.class);
+                        m.invoke(inst, new ByteArrayInputStream(input.getBytes()));
+                        return inst;
+                    } catch (NoSuchMethodException ignored2) {}
+                    try {
+                        Method m = analyzerClass.getMethod(setter, String.class);
+                        m.invoke(inst, input);
+                        return inst;
+                    } catch (NoSuchMethodException ignored2) {}
+                }
+                // si no hay setter, igual devolvemos la instancia (quizá el analizador tome System.in)
+                return inst;
+            } catch (NoSuchMethodException ignored) {}
+
+        } catch (Exception e) {
+            System.err.println("Error creando instancia del analizador: " + e);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    // Busca un método sin argumentos que haga avanzar y devolver el token
+    static Method findTokenMethod(Class<?> analyzerClass) {
+        String[] candidates = new String[] {"nextToken", "siguienteToken", "next", "yylex", "getToken", "next_token", "nextTok"};
+        for (String name : candidates) {
+            try {
+                Method m = analyzerClass.getMethod(name);
+                if (m.getParameterCount() == 0) return m;
+            } catch (NoSuchMethodException ignored) {}
+        }
+        // Si el analizador requiere un parámetro (por ejemplo un token de salida), no lo cubrimos aquí
+        return null;
+    }
+
+    static boolean looksLikeEOF(Object tokenObj) {
+        if (tokenObj == null) return true;
+        try {
+            Class<?> tc = tokenObj.getClass();
+            // Si hay un método getTipo / getType y devuelve 0 o a string "EOF"
+            for (String mname : new String[]{"getTipo","getType","tipo","getKind","getTokenType"}) {
+                try {
+                    Method m = tc.getMethod(mname);
+                    Object val = m.invoke(tokenObj);
+                    if (val == null) continue;
+                    if (val instanceof Number) {
+                        if (((Number)val).intValue() == 0) return true;
+                    }
+                    if (val instanceof String) {
+                        String s = ((String)val).toLowerCase();
+                        if (s.contains("eof") || s.contains("fin") || s.contains("end")) return true;
+                    }
+                } catch (NoSuchMethodException ignored) {}
+            }
+            // si toString contiene EOF
+            String ts = tokenObj.toString().toLowerCase();
+            if (ts.contains("eof") || ts.contains("fin") || ts.contains("end")) return true;
+        } catch (Exception e) {
+            // no importa
+        }
+        return false;
+    }
+
+    static String describeToken(Object tokenObj) {
+        if (tokenObj == null) return "<null>";
+        try {
+            Class<?> tc = tokenObj.getClass();
+            // Si el token es una String simple
+            if (tokenObj instanceof String) return (String) tokenObj;
+
+            // Intentar obtener tipo y lexema
+            String tipo = null;
+            String lex = null;
+
+            // buscar getters para tipo
+            for (String tname : new String[]{"getTipo","getType","tipo","getKind","getTokenType"}) {
+                try { Method m = tc.getMethod(tname); Object v = m.invoke(tokenObj); if (v!=null) tipo = String.valueOf(v); break; } catch (Exception ignored) {}
+            }
+            // buscar getters para lexema / imagen / text
+            for (String lname : new String[]{"getLexema","getImage","getText","lexema","image","text"}) {
+                try { Method m = tc.getMethod(lname); Object v = m.invoke(tokenObj); if (v!=null) lex = String.valueOf(v); break; } catch (Exception ignored) {}
+            }
+
+            if (tipo == null && lex == null) {
+                // intentar campos públicos
+                try {
+                    Field f1 = tc.getField("tipo"); Object v1 = f1.get(tokenObj); if (v1!=null) tipo = String.valueOf(v1);
+                } catch (Exception ignored) {}
+                try {
+                    Field f2 = tc.getField("lexema"); Object v2 = f2.get(tokenObj); if (v2!=null) lex = String.valueOf(v2);
+                } catch (Exception ignored) {}
+            }
+
+            // Construir descripción razonable
+            StringBuilder sb = new StringBuilder();
+            if (tipo != null) sb.append("tipo=").append(tipo);
+            if (lex != null) {
+                if (sb.length()>0) sb.append(" | ");
+                sb.append("lex=\"").append(escape(lex)).append("\"");
+            }
+            if (sb.length() == 0) sb.append(tokenObj.toString());
+            return sb.toString();
+        } catch (Exception e) {
+            return "<error describiendo token: " + e + ">";
+        }
+    }
+
+    static String escape(String s) {
+        return s.replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t");
+    }
+
+    static String readFileToString(File f) throws IOException {
+        try (FileInputStream fis = new FileInputStream(f); ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+            byte[] buf = new byte[8192];
+            int r;
+            while ((r = fis.read(buf)) != -1) bos.write(buf, 0, r);
+            return new String(bos.toByteArray());
+        }
+    }
+}
