@@ -1,0 +1,36 @@
+PROGRAMA {
+
+    long VAR%A;
+    dfloat VAR%A; 
+    
+    var VAR%B := 1L;
+    long VAR%B; 
+
+    VAR%NO%DECLARADA := 10L; 
+
+    long VAR%L;
+    dfloat VAR%D;
+    VAR%D := 1.0;
+    VAR%L := VAR%D; 
+
+    long, dfloat FUNCION%SL(cv sl long P%SL) {
+        P%SL := 100L; 
+        return (P%SL, 0.0);
+    }
+
+    long, dfloat FUNCION%RET%MALO() {
+        return (1.0, 10L); 
+    }
+
+    long L1, L2;
+    L1, L2 = 1L, 2L, 3L; 
+
+    long RET1, RET2, RET3;
+    RET1, RET2, RET3 = FUNCION%SL(1L -> P%SL); 
+    
+    (long P%LAMBDA) {
+        print(P%LAMBDA);
+    } (1.5); 
+    
+    VAR%L := NO%EXISTE.VAR%GLOBAL; 
+}

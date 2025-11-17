@@ -1,0 +1,38 @@
+PROGRAMA {
+
+    long, long FUNC%RECURSIVA(long P) {
+        print("Llamada recursiva...");
+        return (FUNC%RECURSIVA(P -> P)); 
+    }
+
+    long CERO%L;
+    long DIEZ%L;
+    CERO%L := 0L;
+    DIEZ%L := 10L;
+    
+    dfloat CERO%D;
+    dfloat DIEZ%D;
+    CERO%D := 0.0;
+    DIEZ%D := 10.0;
+    
+    long GRANDE;
+    GRANDE := 2147483647L; 
+    
+    
+    ## --- Pruebas (descomentar DE A UNA) --- ##
+
+    ## 1. Prueba de Recursion (h) ##
+    FUNC%RECURSIVA(1L -> P); 
+    
+    ## 2. Prueba Div Cero Long (a) ##
+    print(DIEZ%L / CERO%L);
+
+    ## 3. Prueba Div Cero DFloat (a) ##
+    print(DIEZ%D / CERO%D);
+    
+    ## 4. Prueba Overflow Producto (d)##
+    print(GRANDE * 2L);
+    
+    
+    print("Esta linea no deberia imprimirse.");
+}

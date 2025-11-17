@@ -1,0 +1,23 @@
+PROGRAMA {
+
+    long A
+    A := 10L; 
+
+    long B;
+    B := (10L + A); 
+
+    if (A > 10L) {
+        print("Hola");
+    }
+    
+    B = 10L; 
+
+    long C, D;
+    C, D := 1L, 2L; 
+
+    long, long F%TEST(long P) { return (P, P); }
+    C := F%TEST(1L); 
+    
+    (long P) { print(P); } 1L; 
+
+}

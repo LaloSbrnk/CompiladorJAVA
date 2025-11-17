@@ -1,0 +1,15 @@
+PROGRAMA {
+    long I;
+    I := 0L;
+    
+    print("Inicia bucle DO-UNTIL");
+    
+    do 
+    {
+        I := I + 1L;
+        print(I);
+    } 
+    until (I >= 3L);
+    
+    print("Fin bucle");
+}
