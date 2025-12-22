@@ -1,0 +1,24 @@
+PROGRAMA {
+
+    long VAR%GLOBAL;
+
+    long, dfloat FUNC%TEST%SCOPE() {
+        
+        long VAR%LOCAL;
+        VAR%LOCAL := 99L;
+        
+        print("Variable local dentro:");
+        print(VAR%LOCAL);
+        
+        return (VAR%LOCAL, 0.0);
+    }
+
+    long R1;
+    dfloat R2;
+
+    R1, R2 = FUNC%TEST%SCOPE();
+
+    print("Intentando acceder a variable local desde fuera...");
+
+    print(VAR%LOCAL); 
+}

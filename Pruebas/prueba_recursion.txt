@@ -1,0 +1,24 @@
+RECURSION {
+
+    long FACT(cv sl long N) {
+
+        long AUX;
+        
+        if (N <= 1L) {
+            return (1L);
+        } else {
+            AUX := N * FACT(N - 1L -> N);
+            return (AUX);
+        } endif;
+    }
+
+    long RESULTADO;
+    
+    print("--- Test de Recursividad (Factorial) ---");
+    print("Calculando factorial de 5...");
+    
+    RESULTADO := FACT(5L -> N);
+    
+    print("El resultado deberia ser 120. Obtenido:");
+    print(RESULTADO);
+}

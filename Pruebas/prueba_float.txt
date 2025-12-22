@@ -1,0 +1,27 @@
+FLOAT {
+    dfloat A, B, TOTAL;
+    long ENTERO;
+
+    print("--- Test de Punto Flotante y Conversiones ---");
+    
+    A := 12.5D+0;
+    B := 0.5D+0;
+    ENTERO := 10L;
+
+    print("A vale (12.5):");
+    print(A);
+
+    TOTAL := A * B;
+    print("A * B (debe ser 6.25):");
+    print(TOTAL);
+
+    TOTAL := TOTAL + ENTERO; 
+    print("Sumando 10 (Long) al resultado (debe ser 16.25):");
+    print(TOTAL);
+
+    if (TOTAL > 15.0D+0) {
+        print("Correcto: El resultado es mayor a 15.0");
+    } else {
+        print("Error: La comparacion fallo");
+    } endif;
+}

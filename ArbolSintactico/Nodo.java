@@ -1,0 +1,15 @@
+package ArbolSintactico;
+import CompiladoresMain.AnalizadorLexico;
+import CompiladoresMain.TablaDeAmbitos;
+import CompiladoresMain.GeneradorAssembler; 
+import java.util.HashMap; 
+
+public abstract class Nodo {
+    
+    public abstract String chequear(TablaDeAmbitos TdA); 
+    
+    public abstract void imprimir(String prefijo);
+
+    
+    public abstract String generarCodigo(GeneradorAssembler G, TablaDeAmbitos TdA); 
+}

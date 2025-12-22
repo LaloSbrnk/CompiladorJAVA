@@ -1,0 +1,24 @@
+PROGRAMA {
+    long A;
+    A := 10L;
+
+    if (A > 5L) 
+    {
+        print("A es mayor a 5");
+    } 
+    else 
+    {
+        print("A NO es mayor a 5");
+    }
+    endif;  
+    
+    if (A < 5L) 
+    {
+        print("A es menor a 5");
+    } 
+    else 
+    {
+        print("A NO es menor a 5");
+    }
+    endif;
+}

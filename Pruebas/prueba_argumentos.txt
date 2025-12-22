@@ -1,0 +1,14 @@
+PROGRAMA {
+
+    long, dfloat FUNC%TEST%ARGS(long P%LONG) {
+        print(P%LONG);
+        return (P%LONG, 0.0);
+    }
+
+    long R1;
+    dfloat R2;
+
+    print("Iniciando prueba de argumentos incorrectos...");
+    
+    R1, R2 = FUNC%TEST%ARGS(1.5 -> P%LONG);
+}

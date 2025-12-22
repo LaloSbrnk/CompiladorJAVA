@@ -1,0 +1,18 @@
+PROGRAMA {
+    long I;
+    I := 0L;
+    
+    print("--- Inicio Anidamiento ---");
+
+    do {
+        if (I == 1L) {
+            print("I vale 1 (Dentro del DO)");
+        } else {
+            print("Iterando...");
+        } endif;
+        
+        I := I + 1L;
+    } until (I >= 3L);
+
+    print("Fin del test");
+}

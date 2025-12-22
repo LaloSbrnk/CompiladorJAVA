@@ -1,0 +1,129 @@
+option casemap :none
+include \masm32\include\masm32rt.inc
+includelib \masm32\lib\masm32.lib
+printf PROTO C :VARARG
+
+.DATA
+_new_line_ DB 13, 10, 0
+_format_long DB "%d", 13, 10, 0
+_format_dfloat DB "%.20Lf", 13, 10, 0
+_format_string DB "%s", 13, 10, 0
+_MSG_ERROR_DIV_CERO DB "ERROR EN TIEMPO DE EJECUCION: Division por cero.", 0
+_MSG_ERROR_DIV_CERO_FLOAT DB "ERROR EN TIEMPO DE EJECUCION: Division por cero (flotante).", 0
+_MSG_ERROR_OVERFLOW_PROD DB "ERROR EN TIEMPO DE EJECUCION: Overflow en producto de enteros.", 0
+_MSG_ERROR_RECURSION DB "ERROR EN TIEMPO DE EJECUCION: Recursion no permitida.", 0
+_aux_long DD ?
+_aux_dfloat DQ ?
+
+; --- Variables y Constantes del Programa ---
+_IN_FUNC__FUNCION_RET_MALO_PROGRAMA DB 0
+_RET_0__FUNCION_RET_MALO_PROGRAMA DD ?
+_RET_1__FUNCION_RET_MALO_PROGRAMA DQ ?
+_RET3_PROGRAMA DD ?
+_VAR_A_PROGRAMA DD ?
+_VAR_D_PROGRAMA DQ ?
+_L2_PROGRAMA DD ?
+_RET1_PROGRAMA DD ?
+_VAR_L_PROGRAMA DD ?
+_0_0 DQ 0.0
+_1_0 DQ 1.0
+_VAR_B_PROGRAMA DD ?
+_1_5 DQ 1.5
+_IN_FUNC__FUNCION_SL_PROGRAMA DB 0
+_RET_0__FUNCION_SL_PROGRAMA DD ?
+_RET_1__FUNCION_SL_PROGRAMA DQ ?
+_P_SL_PROGRAMA_FUNCION_SL DD ?
+_L1_PROGRAMA DD ?
+_RET2_PROGRAMA DD ?
+; --- Fin Variables y Constantes ---
+
+
+.CODE
+
+; --- Definicion de Funcion: FUNCION%SL ---
+_FUNCION_SL_PROGRAMA PROC
+push ebp
+mov ebp, esp
+push edi
+push esi
+MOV EAX, 100
+MOV _P_SL_PROGRAMA_FUNCION_SL, EAX
+MOV EAX, _P_SL_PROGRAMA_FUNCION_SL
+MOV _RET_0__FUNCION_SL_PROGRAMA, EAX
+FLD _0_0
+FSTP _RET_1__FUNCION_SL_PROGRAMA
+JMP _FUNCION_SL_PROGRAMA_exit
+_FUNCION_SL_PROGRAMA_exit:
+pop esi
+pop edi
+mov esp, ebp
+pop ebp
+RET
+_FUNCION_SL_PROGRAMA ENDP
+; --- Fin de Funcion: FUNCION%SL ---
+
+
+; --- Definicion de Funcion: FUNCION%RET%MALO ---
+_FUNCION_RET_MALO_PROGRAMA PROC
+push ebp
+mov ebp, esp
+push edi
+push esi
+MOV EAX, _1_0
+MOV _RET_0__FUNCION_RET_MALO_PROGRAMA, EAX
+FILD 10
+FSTP _RET_1__FUNCION_RET_MALO_PROGRAMA
+JMP _FUNCION_RET_MALO_PROGRAMA_exit
+_FUNCION_RET_MALO_PROGRAMA_exit:
+pop esi
+pop edi
+mov esp, ebp
+pop ebp
+RET
+_FUNCION_RET_MALO_PROGRAMA ENDP
+; --- Fin de Funcion: FUNCION%RET%MALO ---
+
+START:
+FINIT
+MOV EAX, 1
+MOV _VAR_B_PROGRAMA, EAX
+FLD _1_0
+FSTP _VAR_D_PROGRAMA
+MOV EAX, 1
+MOV _L1_PROGRAMA, EAX
+MOV EAX, 2
+MOV _L2_PROGRAMA, EAX
+; Chequeo de recursion (h)
+CMP _IN_FUNC__FUNCION_SL_PROGRAMA, 1
+JE _ERROR_RECURSION
+MOV _IN_FUNC__FUNCION_SL_PROGRAMA, 1
+MOV EAX, 1
+MOV _P_SL_PROGRAMA_FUNCION_SL, EAX
+CALL _FUNCION_SL_PROGRAMA
+MOV _IN_FUNC__FUNCION_SL_PROGRAMA, 0
+MOV EAX, _RET_0__FUNCION_SL_PROGRAMA
+MOV _aux_long, EAX
+MOV EAX, _RET_0__FUNCION_SL_PROGRAMA
+MOV _RET1_PROGRAMA, EAX
+MOV EAX, _RET_1__FUNCION_SL_PROGRAMA
+MOV _RET2_PROGRAMA, EAX
+
+; --- Fin del programa principal ---
+invoke ExitProcess, 0
+
+
+; --- Rutinas de Error en Tiempo de Ejecucion ---
+_ERROR_DIV_CERO:
+invoke printf, ADDR _MSG_ERROR_DIV_CERO
+invoke ExitProcess, 1
+_ERROR_DIV_CERO_FLOAT:
+invoke printf, ADDR _MSG_ERROR_DIV_CERO_FLOAT
+invoke ExitProcess, 1
+_ERROR_OVERFLOW_PROD:
+invoke printf, ADDR _MSG_ERROR_OVERFLOW_PROD
+invoke ExitProcess, 1
+_ERROR_RECURSION:
+invoke printf, ADDR _MSG_ERROR_RECURSION
+invoke ExitProcess, 1
+
+END START

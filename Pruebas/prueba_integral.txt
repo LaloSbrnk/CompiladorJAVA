@@ -1,0 +1,61 @@
+PROGRAMA {
+
+    ##
+        Prueba de features del Grupo 11.
+        Temas: 3, 6, 7, 10, 13, 16, 20, 23, 24, 27, 30, 33.
+        Este es un comentario valido (Tema 33).
+    ##
+
+    long VAR%GLOBAL;
+    dfloat VAR%GLOBAL%D;
+    var VAR%INFERIDA := 10L;
+
+    long, dfloat FUNCION%COMPLETA(cv sl long P%SL, cv le dfloat P%LE) {
+        
+        dfloat SUMA;
+        SUMA := P%LE + P%SL; 
+
+        P%LE := SUMA;
+
+        PROGRAMA.VAR%GLOBAL := P%SL * 2L;
+
+        return (PROGRAMA.VAR%GLOBAL, P%LE);
+    }
+
+    VAR%GLOBAL := 0L;
+    VAR%GLOBAL%D := 0.0;
+
+    long L1, L2;
+    L1, L2 = 100L, 200L;
+    
+    do {
+        VAR%INFERIDA := VAR%INFERIDA + 1L;
+        print(VAR%INFERIDA);
+    } until (VAR%INFERIDA >= 12L);
+
+    long RET%L;
+    dfloat RET%D;
+
+    RET%L, RET%D = FUNCION%COMPLETA(L1 -> P%SL, 1.5 -> P%LE);
+    
+    print("Retorno Long de funcion:");
+    print(RET%L);
+    print("Retorno DFloat de funcion:");
+    print(RET%D);
+    
+    print("Probando Lambda...");
+    var VAR%LAMBDA := 1.0;
+    
+    (dfloat ARG%L) {
+        VAR%LAMBDA := ARG%L / 2.0;
+    } (RET%D); 
+
+    print(VAR%LAMBDA);
+
+    long L%PARA%CONVERTIR;
+    dfloat D%CONVERTIDO;
+    L%PARA%CONVERTIR := -10L;
+    
+    D%CONVERTIDO := L%PARA%CONVERTIR;
+    print(D%CONVERTIDO);
+}

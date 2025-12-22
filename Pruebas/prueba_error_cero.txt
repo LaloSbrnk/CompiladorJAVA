@@ -1,0 +1,16 @@
+ERROR {
+    long NUM, DENOM, RES;
+
+    print("--- Test de Error en Tiempo de Ejecucion ---");
+    
+    NUM := 100L;
+    DENOM := 0L;
+
+    print("Intentando dividir por cero...");
+    
+    ## Esto deberia disparar la rutina _ERROR_DIV_CERO en assembler
+       y terminar el programa inmediatamente. ##
+    RES := NUM / DENOM;
+
+    print("ERROR: Si ves este mensaje, el control de errores fallo.");
+}
