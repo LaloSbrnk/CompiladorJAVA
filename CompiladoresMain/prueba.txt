@@ -1,0 +1,11 @@
+PROGRAMA {
+    long A;
+    long B;
+    long C;
+    
+    A := 10L;
+    B := 20L;
+    C := A + B;
+    
+    print(C);
+}
